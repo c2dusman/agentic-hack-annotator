@@ -28,7 +28,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Puppeteer launches and takes a test screenshot on the VPS without crashing (all 4 sandbox flags active)
   3. App restarts automatically after a crash via PM2 and health check stays green
   4. Static files in /public are served correctly from the VPS root URL
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 01-01-PLAN.md — Project skeleton scaffolding with all files, configs, stubs, and local health check verification
+- [ ] 01-02-PLAN.md — VPS deployment, Puppeteer verification, PM2 setup, and human sign-off
 
 ### Phase 2: Screenshot + AI Services
 **Goal**: All three pipeline services (screenshot capture, Gemini vision, Claude copywriting) built and returning correct structured output when called with test inputs
@@ -76,7 +79,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/? | Not started | - |
+| 1. Foundation | 0/2 | Planning complete | - |
 | 2. Screenshot + AI Services | 0/? | Not started | - |
 | 3. Card Template + Render | 0/? | Not started | - |
 | 4. Pipeline Wiring + Frontend + Deploy | 0/? | Not started | - |
