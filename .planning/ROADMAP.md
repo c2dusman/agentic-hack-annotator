@@ -44,7 +44,11 @@ Plans:
   4. When a focus hint is provided, both Gemini and Claude output reflect that focus goal
   5. When no focus hint is provided, Gemini infers a topic and Claude copy aligns to the inferred focus
   6. AI JSON parsing retries up to 2 times and strips markdown fences before failing with a clear error message
-**Plans**: TBD
+**Plans:** 3 plans
+Plans:
+- [ ] 02-01-PLAN.md — Shared retry infrastructure, .env.example fix, screenshotOne capture service + test
+- [ ] 02-02-PLAN.md — Gemini 2.5 Flash vision analysis with structured output + test
+- [ ] 02-03-PLAN.md — Claude Sonnet copywriting service + full pipeline test
 
 ### Phase 3: Card Template + Render
 **Goal**: The HTML card template renders a correct 1080x1920 dark-themed PNG via Puppeteer, with fonts embedded and all content slots filled
@@ -80,6 +84,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 1/2 | In Progress|  |
-| 2. Screenshot + AI Services | 0/? | Not started | - |
+| 2. Screenshot + AI Services | 0/3 | Planned | - |
 | 3. Card Template + Render | 0/? | Not started | - |
 | 4. Pipeline Wiring + Frontend + Deploy | 0/? | Not started | - |
