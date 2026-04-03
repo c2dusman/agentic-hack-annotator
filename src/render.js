@@ -1,8 +1,7 @@
 const puppeteer = require('puppeteer');
-const os = require('os');
 
 function getLaunchOptions() {
-  const options = {
+  return {
     headless: true,
     args: [
       '--no-sandbox',
@@ -11,10 +10,6 @@ function getLaunchOptions() {
       '--disable-gpu'
     ]
   };
-  if (os.platform() === 'linux') {
-    options.executablePath = '/usr/bin/chromium-browser';
-  }
-  return options;
 }
 
 async function renderCard(annotationData, screenshotBase64, focus = null) {
