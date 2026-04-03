@@ -38,14 +38,14 @@
 
 - [ ] **REL-01**: AI JSON parsing includes retry logic (max 2 attempts) with markdown fence sanitizer
 - [ ] **REL-02**: All pipeline errors return meaningful user-facing messages
-- [ ] **REL-03**: Puppeteer browser instances cleaned up via try/finally (no orphaned Chrome)
+- [x] **REL-03**: Puppeteer browser instances cleaned up via try/finally (no orphaned Chrome)
 - [ ] **REL-04**: Output files auto-cleaned after 1 hour
 
 ### Deployment
 
 - [ ] **DEPLOY-01**: App runs on Hostinger VPS (Ubuntu 22.04) via PM2
-- [ ] **DEPLOY-02**: Puppeteer launches with all 4 Linux sandbox flags
-- [ ] **DEPLOY-03**: Health check endpoint at GET /api/health
+- [x] **DEPLOY-02**: Puppeteer launches with all 4 Linux sandbox flags
+- [x] **DEPLOY-03**: Health check endpoint at GET /api/health
 
 ## v2 Requirements
 
@@ -101,11 +101,11 @@
 | UI-04 | Phase 4 | Pending |
 | REL-01 | Phase 2 | Pending |
 | REL-02 | Phase 2 | Pending |
-| REL-03 | Phase 1 | Pending |
+| REL-03 | Phase 1 | Complete |
 | REL-04 | Phase 4 | Pending |
 | DEPLOY-01 | Phase 1 | Pending |
-| DEPLOY-02 | Phase 1 | Pending |
-| DEPLOY-03 | Phase 1 | Pending |
+| DEPLOY-02 | Phase 1 | Complete |
+| DEPLOY-03 | Phase 1 | Complete |
 
 **Coverage:**
 - v1 requirements: 24 total
