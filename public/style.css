@@ -1,1 +1,197 @@
-/* TODO: Phase 4 — Web UI styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #0D0D0D;
+  color: #FFFFFF;
+  min-height: 100vh;
+  padding: 64px 16px;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 16px;
+  font-weight: 400;
+  color: #CCCCCC;
+  margin-bottom: 32px;
+}
+
+form {
+  background: #1A1A1A;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+label {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  display: block;
+  margin-bottom: 4px;
+}
+
+input[type="url"],
+input[type="text"] {
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: #FFFFFF;
+  background: #1A1A1A;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 12px 16px;
+  outline: none;
+  transition: border-color 150ms ease;
+}
+
+input[type="url"]:focus,
+input[type="text"]:focus {
+  border-color: #FF2D6B;
+}
+
+input[type="url"]::placeholder,
+input[type="text"]::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.helper-text {
+  font-size: 14px;
+  font-weight: 400;
+  color: #CCCCCC;
+  line-height: 1.5;
+  margin-top: -8px;
+}
+
+#generate-btn {
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #FFFFFF;
+  background: #FF2D6B;
+  border: none;
+  border-radius: 8px;
+  padding: 16px 24px;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+  margin-top: 8px;
+}
+
+#generate-btn:hover {
+  background: #E0245E;
+}
+
+#generate-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.inline-error {
+  font-size: 14px;
+  color: #FF4444;
+  margin-top: -8px;
+}
+
+#loading-section {
+  text-align: center;
+  margin-top: 48px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 45, 107, 0.2);
+  border-top-color: #FF2D6B;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.status-text {
+  font-size: 16px;
+  font-weight: 400;
+  color: #CCCCCC;
+}
+
+.long-running-notice {
+  font-size: 14px;
+  color: #CCCCCC;
+  margin-top: 8px;
+}
+
+#result-section {
+  margin-top: 48px;
+  text-align: center;
+}
+
+#result-image {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.download-btn {
+  display: inline-block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #FF2D6B;
+  background: transparent;
+  border: 2px solid #FF2D6B;
+  border-radius: 8px;
+  padding: 16px 24px;
+  text-decoration: none;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.download-btn:hover {
+  background: #FF2D6B;
+  color: #FFFFFF;
+}
+
+.error-box {
+  margin-top: 48px;
+  border: 2px solid #FF4444;
+  background: rgba(255, 68, 68, 0.08);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.error-box p {
+  font-size: 14px;
+  font-weight: 400;
+  color: #CCCCCC;
+  line-height: 1.5;
+}
