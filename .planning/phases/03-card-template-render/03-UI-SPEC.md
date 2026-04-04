@@ -20,6 +20,28 @@ the card template's visual contract.
 
 ---
 
+## IMPLEMENTATION NOTE — RESEARCH.md Pattern 5 CSS Contains Stale Values
+
+The CSS block in RESEARCH.md Pattern 5 was written before the final typography and spacing
+contract was locked. It contains values that contradict this UI-SPEC. The executor MUST use
+the values in this UI-SPEC, not the values in RESEARCH.md Pattern 5.
+
+Specific overrides (UI-SPEC value supersedes RESEARCH.md in all cases):
+
+| Selector | RESEARCH.md (stale) | UI-SPEC (authoritative) |
+|----------|---------------------|-------------------------|
+| `.card-subtitle { font-size }` | `36px` | `32px` |
+| `.step-number { font-weight }` | `600` | `700` |
+| `.step-label { font-weight }` | `600` | `700` |
+| `.focus-badge { padding }` | `10px 24px` | `8px 24px` |
+| `.step-content { gap }` | `6px` | `8px` |
+| `.step-number { font-size }` | `26px` | `28px` |
+
+**Rule:** When any CSS value in RESEARCH.md Pattern 5 conflicts with this UI-SPEC, this
+UI-SPEC wins. RESEARCH.md is a research artifact; UI-SPEC is the design contract.
+
+---
+
 ## Design System
 
 | Property | Value | Source |
@@ -70,15 +92,13 @@ render target.
 | Heading | Space Grotesk | 32px | 700 (bold) | auto | `.step-label` — step title |
 | Body | DM Sans | 32px | 400 (regular) | 1.4 | `.card-subtitle` — subtitle paragraph |
 | Body-sm | DM Sans | 28px | 400 (regular) | 1.4 | `.step-description` — clamped 2-line step body |
+| Body-sm | Space Grotesk | 28px | 700 (bold) | auto | `.step-number` — numeral inside 52×52px circle |
+| Body-sm | DM Sans | 28px | 700 (bold) | auto | `.focus-badge` — focus hint pill |
 | Caption | DM Sans | 24px | 400 (regular) | auto | `.footer` — URL + brand attribution |
-| Badge | DM Sans | 28px | 700 (bold) | auto | `.focus-badge` — focus hint pill |
 
 Font weights in use: **400 (regular)** and **700 (bold)** only.
 
-Font size scale (4 sizes): **72px** (Display) / **32px** (Heading + Body) / **28px** (Body-sm + Badge) / **24px** (Caption).
-
-Step number circle (`.step-number`): `font-size: 26px` (within 28px badge/body-sm tier visually), `font-weight: 700` (bold).
-Note: `.step-number` font-size 26px is a declared exception — it is contained within a 52×52px circle and does not represent a typography hierarchy role; it is a decorative numeral.
+Font size scale (4 sizes): **72px** (Display) / **32px** (Heading + Body) / **28px** (Body-sm + Badge + Step Number) / **24px** (Caption).
 
 Step description clamp: `-webkit-line-clamp: 2` with `-webkit-box` display. Chromium-specific
 prefix is correct here — Puppeteer renders via Chromium. Source: CONTEXT.md D-06, RESEARCH.md Pattern 5.
@@ -257,6 +277,7 @@ All design decisions are locked from upstream. Claude's discretion was exercised
 | Footer font-size | `24px` | Visually de-emphasized (muted color + smaller size) |
 | Step number circle | `52px × 52px` | Touch-target equivalent; visually anchors each step row |
 | `.card-subtitle` font-size | `32px` | Consolidates with `.step-label` size; eliminates 36px size to stay within 4-size typography scale |
+| `.step-number` font-size | `28px` | Absorbs into existing Body-sm tier (28px); keeps typography scale at exactly 4 sizes |
 | `.step-content` gap | `8px` | Corrected from 6px to nearest multiple of 4; adequate separation between step label and description |
 
 All color values, font families, canvas dimensions, and placeholder format are from brief §7 (locked).
@@ -279,4 +300,5 @@ All color values, font families, canvas dimensions, and placeholder format are f
 *Phase: 03-card-template-render*
 *UI-SPEC created: 2026-04-04*
 *UI-SPEC revised: 2026-04-04 — fixed typography (5→4 sizes, 3→2 weights) and spacing (focus badge 10px→8px, step-content gap 6px→8px)*
+*UI-SPEC revised: 2026-04-04 — fixed blocking issue: .step-number absorbed into 28px tier (was 26px exception); added RESEARCH.md stale-CSS override table*
 *Sources: REQUIREMENTS.md (TMPL-01/02/03, PIPE-05, FOCUS-05), CONTEXT.md (D-01 through D-07), RESEARCH.md (Pattern 1-5, CSS block), annotator-project-brief.md §7*
