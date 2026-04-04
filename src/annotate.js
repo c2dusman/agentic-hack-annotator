@@ -31,6 +31,7 @@ Rules:
 - All steps must directly serve the focus goal — nothing off-topic
 - Write for a non-technical audience
 - Keep it punchy and clear
+- Create exactly one step for each element in the elements array — use the element label and description as the basis for that step. The number of steps MUST equal the number of elements.
 - Return ONLY valid JSON. No explanation. No markdown.`;
 
 const NO_FOCUS_PROMPT = `You are writing copy for a social media tutorial card about a webpage.
@@ -57,6 +58,7 @@ Rules:
 - Steps should be sequential and actionable
 - Write for a non-technical audience
 - Keep it punchy and clear
+- Create exactly one step for each element in the elements array — use the element label and description as the basis for that step. The number of steps MUST equal the number of elements.
 - Return ONLY valid JSON. No explanation. No markdown.`;
 
 async function generateAnnotations(analysisData, focus = null) {
