@@ -12,8 +12,6 @@ The user wants to create a tutorial focused on: "{{FOCUS_HINT}}"
 With that focus in mind, analyze this screenshot and identify the 3 to 5 UI elements
 most relevant to that specific goal. Ignore elements unrelated to the focus topic.
 
-For each element, provide its approximate position as x and y percentages (0-100) of the screenshot dimensions, where (0,0) is the top-left corner and (100,100) is the bottom-right corner. Be precise — place the marker directly on the button, link, or UI element.
-
 Return a JSON object with exactly this structure:
 {
   "pageTitle": "Short descriptive title of what this page/tool is",
@@ -24,8 +22,7 @@ Return a JSON object with exactly this structure:
       "id": 1,
       "label": "Short element name",
       "description": "What this element is and how it relates to the focus goal",
-      "x": 50,
-      "y": 30
+      "position": "top-left|top-right|center|bottom-left|bottom-right|top-center|bottom-center"
     }
   ]
 }
@@ -37,8 +34,6 @@ const NO_FOCUS_PROMPT = `You are analyzing a webpage screenshot to extract struc
 Analyze this screenshot and identify the 3 to 5 most important interactive or
 informational elements. Focus on what makes this page useful to a first-time visitor.
 
-For each element, provide its approximate position as x and y percentages (0-100) of the screenshot dimensions, where (0,0) is the top-left corner and (100,100) is the bottom-right corner. Be precise — place the marker directly on the button, link, or UI element.
-
 Return a JSON object with exactly this structure:
 {
   "pageTitle": "Short descriptive title of what this page/tool is",
@@ -49,8 +44,7 @@ Return a JSON object with exactly this structure:
       "id": 1,
       "label": "Short element name",
       "description": "What this element is and what it does",
-      "x": 50,
-      "y": 30
+      "position": "top-left|top-right|center|bottom-left|bottom-right|top-center|bottom-center"
     }
   ]
 }
@@ -73,10 +67,9 @@ const RESPONSE_SCHEMA = {
           id: { type: Type.NUMBER },
           label: { type: Type.STRING },
           description: { type: Type.STRING },
-          x: { type: Type.NUMBER },
-          y: { type: Type.NUMBER }
+          position: { type: Type.STRING }
         },
-        required: ['id', 'label', 'description', 'x', 'y']
+        required: ['id', 'label', 'description', 'position']
       }
     }
   },

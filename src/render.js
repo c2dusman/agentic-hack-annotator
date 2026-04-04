@@ -28,20 +28,33 @@ function escapeHtml(str) {
 
 function buildStepsHtml(steps) {
   return steps.map(step => {
-    return `<div class="step"><span class="arrow">&rarr;</span> <span class="step-label">${escapeHtml(step.label)}</span> &mdash; ${escapeHtml(step.description)}</div>`;
+    return `<div class="step">
+  <div class="step-number">${step.number}</div>
+  <div class="step-content">
+    <span class="step-label">${escapeHtml(step.label)}</span>
+    <span class="step-description">${escapeHtml(step.description)}</span>
+  </div>
+</div>`;
   }).join('\n');
 }
+
+const POSITION_MAP = {
+  'top-left':      { top: '12%', left: '15%' },
+  'top-center':    { top: '12%', left: '50%' },
+  'top-right':     { top: '12%', left: '85%' },
+  'center':        { top: '50%', left: '50%' },
+  'center-left':   { top: '50%', left: '15%' },
+  'center-right':  { top: '50%', left: '85%' },
+  'bottom-left':   { top: '85%', left: '15%' },
+  'bottom-center': { top: '85%', left: '50%' },
+  'bottom-right':  { top: '85%', left: '85%' },
+};
 
 function buildMarkersHtml(analysisData) {
   if (!analysisData || !analysisData.elements) return '';
   return analysisData.elements.map((el, i) => {
-    const x = Math.max(0, Math.min(100, el.x || 50));
-    const y = Math.max(0, Math.min(100, el.y || 50));
-    const num = el.id || i + 1;
-    return `<div class="marker-group" style="top:${y}%;left:${x}%">
-  <div class="marker-highlight"></div>
-  <div class="marker-number">${num}</div>
-</div>`;
+    const pos = POSITION_MAP[el.position] || POSITION_MAP['center'];
+    return `<div class="marker" style="top:${pos.top};left:${pos.left}">${el.id || i + 1}</div>`;
   }).join('\n');
 }
 
