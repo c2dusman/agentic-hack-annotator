@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: Foundation** - Express server scaffolded and Puppeteer confirmed working on VPS
 - [x] **Phase 2: Screenshot + AI Services** - All three data-pipeline services built and tested in isolation (completed 2026-04-04)
-- [ ] **Phase 3: Card Template + Render** - HTML template designed and Puppeteer render producing correct 1080x1920 PNGs on VPS
+- [x] **Phase 3: Card Template + Render** - HTML template designed and Puppeteer render producing correct 1080x1920 PNGs on VPS (completed 2026-04-04)
 - [ ] **Phase 4: Pipeline Wiring + Frontend + Deploy** - Full end-to-end app live on Hostinger VPS
 
 ## Phase Details
@@ -61,9 +61,9 @@ Plans:
   3. DM Sans and Space Grotesk fonts render correctly on the VPS (no fallback sans-serif visible)
   4. Focus badge appears on the card when a focus hint was provided and is absent when not provided
   5. Puppeteer page is always closed in a finally block — no orphaned Chrome processes accumulate
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 Plans:
-- [ ] 03-01-PLAN.md — Full card template, renderCard() implementation, and integration test
+- [x] 03-01-PLAN.md — Full card template, renderCard() implementation, and integration test
 **UI hint**: yes
 
 ### Phase 4: Pipeline Wiring + Frontend + Deploy
@@ -88,5 +88,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 1/2 | In Progress|  |
 | 2. Screenshot + AI Services | 4/4 | Complete   | 2026-04-04 |
-| 3. Card Template + Render | 0/1 | Not started | - |
+| 3. Card Template + Render | 1/1 | Complete   | 2026-04-04 |
 | 4. Pipeline Wiring + Frontend + Deploy | 0/? | Not started | - |
