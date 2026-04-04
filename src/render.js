@@ -1,4 +1,10 @@
+'use strict';
+
 const puppeteer = require('puppeteer');
+const sharp = require('sharp');
+const fs = require('fs');
+const path = require('path');
+const { generateId, ensureOutputDir } = require('./utils');
 
 function getLaunchOptions() {
   return {
@@ -12,14 +18,68 @@ function getLaunchOptions() {
   };
 }
 
-async function renderCard(annotationData, screenshotBase64, focus = null) {
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function buildStepsHtml(steps) {
+  return steps.map(step => {
+    return `<div class="step">
+  <div class="step-number">${step.number}</div>
+  <div class="step-content">
+    <span class="step-label">${escapeHtml(step.label)}</span>
+    <span class="step-description">${escapeHtml(step.description)}</span>
+  </div>
+</div>`;
+  }).join('\n');
+}
+
+function populateTemplate(template, annotationData, screenshotBase64, focus, pageUrl) {
+  return template
+    .replace('{{CARD_TITLE}}', escapeHtml(annotationData.cardTitle))
+    .replace('{{CARD_SUBTITLE}}', escapeHtml(annotationData.cardSubtitle))
+    .replace('{{STEPS_HTML}}', buildStepsHtml(annotationData.steps))
+    .replace('{{PAGE_URL}}', escapeHtml(pageUrl || ''))
+    .replace('{{FOCUS_LABEL}}', escapeHtml(focus || ''))
+    .replace('{{FOCUS_BADGE_STYLE}}', focus ? '' : 'display:none')
+    .replace('{{SCREENSHOT_BASE64}}', screenshotBase64);
+}
+
+async function renderCard(annotationData, screenshotBase64, focus = null, pageUrl = '') {
   let browser = null;
+  let page = null;
   try {
+    const template = fs.readFileSync(path.join(__dirname, '../templates/card.html'), 'utf8');
+    const html = populateTemplate(template, annotationData, screenshotBase64, focus, pageUrl);
+
     browser = await puppeteer.launch(getLaunchOptions());
-    // TODO: Phase 3 — implement full card rendering
-    throw new Error('render.js not yet implemented');
+    page = await browser.newPage();
+    await page.setViewport({ width: 1080, height: 1920 });
+    await page.setContent(html, { waitUntil: 'domcontentloaded' });
+    await page.evaluate(() => document.fonts.ready);
+
+    const rawBuffer = await page.screenshot({
+      type: 'png',
+      clip: { x: 0, y: 0, width: 1080, height: 1920 }
+    });
+
+    const optimized = await sharp(rawBuffer)
+      .png({ compressionLevel: 9, palette: false })
+      .toBuffer();
+
+    ensureOutputDir();
+    const filename = generateId() + '.png';
+    const filepath = path.join(process.env.OUTPUT_DIR || './output', filename);
+    fs.writeFileSync(filepath, optimized);
+
+    return { filename, filepath };
   } finally {
-    if (browser) await browser.close();
+    if (page) await page.close().catch(() => {});
+    if (browser) await browser.close().catch(() => {});
   }
 }
 
