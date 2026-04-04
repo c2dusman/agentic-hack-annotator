@@ -8,7 +8,7 @@ const { renderCard, renderStepCards } = require('./src/render');
 const cron = require('node-cron');
 const archiver = require('archiver');
 const fs = require('fs');
-const { isValidUrl, sanitizeFocus, cleanupOldFiles, ensureOutputDir, withTimeout } = require('./src/utils');
+const { isValidUrl, sanitizeFocus, cleanupOldFiles, ensureOutputDir, withTimeout, cropToVisibleArea } = require('./src/utils');
 
 dotenv.config();
 
@@ -43,7 +43,9 @@ app.post('/api/generate', async (req, res) => {
   try {
     const result = await withTimeout(
       (async () => {
-        const { base64 } = await captureScreenshot(url);
+        const { base64: fullBase64 } = await captureScreenshot(url);
+        // Crop to visible area so Gemini coordinates match the displayed portion
+        const base64 = await cropToVisibleArea(fullBase64);
         const analysisData = await analyzeScreenshot(base64, focus);
         const annotationData = await generateAnnotations(analysisData, focus);
         const { filename } = await renderCard(annotationData, base64, focus, url, analysisData);
