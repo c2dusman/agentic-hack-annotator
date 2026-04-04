@@ -5,6 +5,7 @@ status: draft
 shadcn_initialized: false
 preset: none
 created: 2026-04-04
+revised: 2026-04-04
 ---
 
 # Phase 3 — UI Design Contract
@@ -40,7 +41,7 @@ Card-internal spacing (all values are multiples of 4):
 | Token | Value | Usage in Card Template |
 |-------|-------|------------------------|
 | xs | 4px | — not used |
-| sm | 8px | — not used |
+| sm | 8px | `.step-content` flex gap between label and description |
 | md | 16px | Title→divider margin (`margin-bottom: 16px`) |
 | lg | 24px | Step number↔content gap (`gap: 24px`), focus badge horizontal padding |
 | xl | 32px | Subtitle→screenshot margin (`margin-bottom: 48px` uses 2xl), footer top padding (`padding-top: 32px`) |
@@ -66,13 +67,18 @@ render target.
 | Role | Font Family | Size | Weight | Line Height | Usage |
 |------|-------------|------|--------|-------------|-------|
 | Display | DM Sans | 72px | 700 (bold) | 1.1 | `.card-title` — main heading |
-| Heading | Space Grotesk | 32px | 600 (semibold) | auto | `.step-label` — step title |
-| Body | DM Sans | 36px | 400 (regular) | 1.4 | `.card-subtitle` — subtitle paragraph |
+| Heading | Space Grotesk | 32px | 700 (bold) | auto | `.step-label` — step title |
+| Body | DM Sans | 32px | 400 (regular) | 1.4 | `.card-subtitle` — subtitle paragraph |
 | Body-sm | DM Sans | 28px | 400 (regular) | 1.4 | `.step-description` — clamped 2-line step body |
 | Caption | DM Sans | 24px | 400 (regular) | auto | `.footer` — URL + brand attribution |
 | Badge | DM Sans | 28px | 700 (bold) | auto | `.focus-badge` — focus hint pill |
 
-Font weights in use: **400 (regular)** and **700 (bold)** from DM Sans; **600 (semibold)** from Space Grotesk.
+Font weights in use: **400 (regular)** and **700 (bold)** only.
+
+Font size scale (4 sizes): **72px** (Display) / **32px** (Heading + Body) / **28px** (Body-sm + Badge) / **24px** (Caption).
+
+Step number circle (`.step-number`): `font-size: 26px` (within 28px badge/body-sm tier visually), `font-weight: 700` (bold).
+Note: `.step-number` font-size 26px is a declared exception — it is contained within a 52×52px circle and does not represent a typography hierarchy role; it is a decorative numeral.
 
 Step description clamp: `-webkit-line-clamp: 2` with `-webkit-box` display. Chromium-specific
 prefix is correct here — Puppeteer renders via Chromium. Source: CONTEXT.md D-06, RESEARCH.md Pattern 5.
@@ -111,18 +117,18 @@ Fixed render target: **1080px wide × 1920px tall** (9:16 ratio).
 | Zone | Height | CSS Constraint |
 |------|--------|----------------|
 | Card outer padding | 80px top + 80px bottom | `padding: 80px 72px` on `.card` |
-| Focus badge (conditional) | ~60px + 32px bottom margin | `display: inline-block; margin-bottom: 32px` |
+| Focus badge (conditional) | ~44px + 32px bottom margin | `display: inline-block; margin-bottom: 32px` |
 | Card title | ~79px (72px font × 1.1 lh) | `font-size: 72px; line-height: 1.1` |
 | Title bottom margin | 16px | `margin-bottom: 16px` |
 | Pink divider | 4px + 24px bottom margin | `height: 4px; margin-bottom: 24px` |
-| Subtitle | ~100px (36px × 1.4 × ~2 lines) | `font-size: 36px; margin-bottom: 48px` |
+| Subtitle | ~90px (32px × 1.4 × ~2 lines) | `font-size: 32px; margin-bottom: 48px` |
 | Screenshot slot | **520px fixed** | `flex: 0 0 520px; margin-bottom: 48px` |
 | Steps container | fills remaining height | `flex: 1; overflow: hidden` |
 | Footer | ~60px | `margin-top: auto; padding-top: 32px` |
 
-Total non-steps height (with focus badge): ~80+60+32+79+16+4+24+100+48+520+48+60+80 = ~1151px
-Remaining for steps (3-5 items): ~769px with badge / ~829px without badge.
-At 5 steps × ~28px gap: steps each get ~130-145px of space — sufficient for 2-line clamped description.
+Total non-steps height (with focus badge): ~80+44+32+79+16+4+24+90+48+520+48+60+80 = ~1125px
+Remaining for steps (3-5 items): ~795px with badge / ~839px without badge.
+At 5 steps × ~28px gap: steps each get ~135-150px of space — sufficient for 2-line clamped description.
 
 Screenshot slot: `flex: 0 0 520px` — non-growing, non-shrinking fixed height.
 `object-fit: cover; object-position: top` on the `<img>` achieves top-aligned crop (CONTEXT.md D-01).
@@ -166,7 +172,7 @@ The contract here governs what the card displays statically.
 | Element | Copy | Source |
 |---------|------|--------|
 | Card title | AI-generated `cardTitle` (max ~60 chars fits at 72px) | `annotate.js` output |
-| Card subtitle | AI-generated `cardSubtitle` (~100-120 chars at 36px, ~2 lines) | `annotate.js` output |
+| Card subtitle | AI-generated `cardSubtitle` (~100-120 chars at 32px, ~2 lines) | `annotate.js` output |
 | Step label | AI-generated `stepTitle` per step | `annotate.js` output |
 | Step description | AI-generated `stepDescription` — clamped to 2 lines | `annotate.js` output |
 | Focus badge | User-supplied focus hint text verbatim | `focus` request param |
@@ -209,7 +215,7 @@ The focus badge has exactly two visual states:
 
 Badge position: above `.card-title`, aligned to left edge (`align-self: flex-start`).
 Badge appearance: `background: #FF2D6B`, `color: #FFFFFF`, `border-radius: 100px` (pill shape),
-`padding: 10px 24px`, `font-size: 28px`, `font-weight: 700`.
+`padding: 8px 24px`, `font-size: 28px`, `font-weight: 700`.
 
 Source: REQUIREMENTS.md FOCUS-05, RESEARCH.md Pattern 5, brief §7.
 
@@ -245,11 +251,13 @@ All design decisions are locked from upstream. Claude's discretion was exercised
 
 | Decision Area | Value Chosen | Rationale |
 |---------------|-------------|-----------|
-| Screenshot slot height | `flex: 0 0 520px` | Leaves ~769px for steps (5 steps at ~28px gap = comfortable) |
+| Screenshot slot height | `flex: 0 0 520px` | Leaves ~795px for steps (5 steps at ~28px gap = comfortable) |
 | Step gap | `28px` | Between `lg` (24px) and `xl` (32px); balances breathing room vs. fitting 5 steps |
 | Focus badge font-size | `28px` | Matches step-description size; readable without overwhelming title |
 | Footer font-size | `24px` | Visually de-emphasized (muted color + smaller size) |
 | Step number circle | `52px × 52px` | Touch-target equivalent; visually anchors each step row |
+| `.card-subtitle` font-size | `32px` | Consolidates with `.step-label` size; eliminates 36px size to stay within 4-size typography scale |
+| `.step-content` gap | `8px` | Corrected from 6px to nearest multiple of 4; adequate separation between step label and description |
 
 All color values, font families, canvas dimensions, and placeholder format are from brief §7 (locked).
 
@@ -270,4 +278,5 @@ All color values, font families, canvas dimensions, and placeholder format are f
 
 *Phase: 03-card-template-render*
 *UI-SPEC created: 2026-04-04*
+*UI-SPEC revised: 2026-04-04 — fixed typography (5→4 sizes, 3→2 weights) and spacing (focus badge 10px→8px, step-content gap 6px→8px)*
 *Sources: REQUIREMENTS.md (TMPL-01/02/03, PIPE-05, FOCUS-05), CONTEXT.md (D-01 through D-07), RESEARCH.md (Pattern 1-5, CSS block), annotator-project-brief.md §7*
