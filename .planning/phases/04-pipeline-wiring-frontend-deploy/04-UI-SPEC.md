@@ -50,14 +50,16 @@ Source: 8-point default scale; no exceptions specified in CONTEXT.md or brief.
 
 ## Typography
 
+Two weights only. Weight 700 is eliminated; heading uses weight 600.
+
 | Role | Size | Weight | Line Height | Font |
 |------|------|--------|-------------|------|
 | Body / Helper | 14px | 400 | 1.5 | DM Sans |
 | Label | 16px | 600 | 1.4 | DM Sans |
-| Input / CTA button | 18px | 400 | 1.4 | DM Sans |
-| Heading (page title) | 36px | 700 | 1.2 | DM Sans |
+| Input / CTA button text | 18px | 400 | 1.4 | DM Sans |
+| Heading (page title) | 36px | 600 | 1.2 | DM Sans |
 
-Source: Brief Section 9 defines hierarchy (large heading + subtitle + inputs + button). Exact px values are Claude's discretion (confirmed in CONTEXT.md).
+Source: Brief Section 9 defines hierarchy (large heading + subtitle + inputs + button). Exact px values are Claude's discretion (confirmed in CONTEXT.md). Weight consolidated to 2 per checker contract (fix applied 2026-04-04).
 
 ---
 
@@ -89,15 +91,16 @@ Source: Brief Section 9 (dark background #0D0D0D, pink #FF2D6B button), card.htm
 | Horizontal padding | 16px (mobile) / 0px (centered at max-width on wider viewports) |
 | Form layout | Single column, full-width inputs stacked vertically |
 | Result section | Below form, same 600px column, image full-width within column |
+| Primary focal point | Generate button — full-width, #FF2D6B background, largest interactive element on the page; all other elements lead the eye toward it |
 
-Source: Brief Section 9 — "Centered single-column layout, max-width 600px."
+Source: Brief Section 9 — "Centered single-column layout, max-width 600px." Focal point line added per checker requirement (fix applied 2026-04-04).
 
 ---
 
 ## Component Inventory
 
 ### Page Heading Block
-- `<h1>` — "AnnotatorAI" — 36px / weight 700 / #FFFFFF
+- `<h1>` — "AnnotatorAI" — 36px / weight 600 / #FFFFFF
 - `<p>` subtitle — "Paste any URL. Get an annotated visual. Instantly." — 16px / weight 400 / #CCCCCC
 - Source: Brief Section 9 exact copy.
 
