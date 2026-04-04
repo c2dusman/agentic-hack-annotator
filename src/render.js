@@ -40,13 +40,11 @@ function buildStepsHtml(steps) {
 
 function buildMarkersHtml(analysisData) {
   if (!analysisData || !analysisData.elements) return '';
-  const overlay = '<div class="screenshot-overlay"></div>';
-  const markers = analysisData.elements.map((el, i) => {
+  return analysisData.elements.map((el, i) => {
     const x = Math.max(5, Math.min(95, el.x_percent || 50));
     const y = Math.max(5, Math.min(95, el.y_percent || 50));
     return `<div class="marker" style="top:${y}%;left:${x}%">${el.id || i + 1}</div>`;
   }).join('\n');
-  return overlay + '\n' + markers;
 }
 
 function populateTemplate(template, annotationData, screenshotBase64, focus, pageUrl, analysisData) {
