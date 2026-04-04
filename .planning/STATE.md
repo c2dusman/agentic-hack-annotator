@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-01-PLAN.md
-last_updated: "2026-04-04T10:23:31.607Z"
+stopped_at: Completed 02-02-PLAN.md
+last_updated: "2026-04-04T10:26:43.028Z"
 last_activity: 2026-04-04
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 5
-  completed_plans: 3
+  completed_plans: 4
   percent: 0
 ---
 
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 02 (screenshot-ai-services) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 Status: Ready to execute
 Last activity: 2026-04-04
 
@@ -54,6 +54,7 @@ Progress: [░░░░░░░░░░] 0%
 *Updated after each plan completion*
 | Phase 01-foundation P01 | 146 | 2 tasks | 17 files |
 | Phase 02-screenshot-ai-services P01 | 2 | 2 tasks | 4 files |
+| Phase 02-screenshot-ai-services P02 | 3 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -67,6 +68,8 @@ Recent decisions affecting current work:
 - [Phase 01-foundation]: CommonJS chosen over ESM: omit 'type: module' to match brief examples and avoid __dirname gotchas
 - [Phase 01-foundation]: render.js stub excludes executablePath: VPS-only config, added conditionally on Linux deployment
 - [Phase 02-screenshot-ai-services]: Lazy screenshotone.Client construction in getClient() helper — allows module load without keys, throws clear error at call time
+- [Phase 02-screenshot-ai-services]: Gemini responseSchema with Type.OBJECT enforces JSON at the API level — no regex parsing needed
+- [Phase 02-screenshot-ai-services]: FOCUS_PROMPT and NO_FOCUS_PROMPT as separate template constants for clean conditional selection
 
 ### Pending Todos
 
@@ -81,6 +84,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-04T10:23:31.604Z
-Stopped at: Completed 02-01-PLAN.md
+Last session: 2026-04-04T10:26:43.025Z
+Stopped at: Completed 02-02-PLAN.md
 Resume file: None
