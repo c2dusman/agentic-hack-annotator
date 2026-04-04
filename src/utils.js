@@ -44,4 +44,31 @@ function sanitizeFocus(focus) {
   return trimmed.slice(0, 100);
 }
 
-module.exports = { generateId, ensureOutputDir, cleanupOldFiles, isValidUrl, sanitizeFocus };
+function stripMarkdownFences(text) {
+  return text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/i, '').trim();
+}
+
+async function withJsonRetry(apiFn, maxAttempts = 2) {
+  let lastError;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      const rawText = await apiFn();
+      const cleaned = stripMarkdownFences(rawText);
+      return JSON.parse(cleaned);
+    } catch (err) {
+      lastError = err;
+    }
+  }
+  throw lastError;
+}
+
+function withTimeout(promise, ms, label = 'Operation') {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms)
+    )
+  ]);
+}
+
+module.exports = { generateId, ensureOutputDir, cleanupOldFiles, isValidUrl, sanitizeFocus, stripMarkdownFences, withJsonRetry, withTimeout };
