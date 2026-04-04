@@ -38,7 +38,7 @@ app.post('/api/generate', async (req, res) => {
         const { base64 } = await captureScreenshot(url);
         const analysisData = await analyzeScreenshot(base64, focus);
         const annotationData = await generateAnnotations(analysisData, focus);
-        const { filename } = await renderCard(annotationData, base64, focus, url);
+        const { filename } = await renderCard(annotationData, base64, focus, url, analysisData);
         return filename;
       })(),
       60000,

@@ -73,6 +73,7 @@
       border: 2px solid rgba(255, 45, 107, 0.4);
       overflow: hidden;
       margin-bottom: 48px;
+      position: relative;
     }
 
     .screenshot-slot img {
@@ -81,6 +82,24 @@
       object-fit: cover;
       object-position: top;
       display: block;
+    }
+
+    .marker {
+      position: absolute;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #FF2D6B;
+      color: #FFFFFF;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 0 4px rgba(255, 45, 107, 0.35), 0 4px 12px rgba(0,0,0,0.5);
+      z-index: 2;
     }
 
     .steps-container {
@@ -153,6 +172,7 @@
     <div class="card-subtitle">{{CARD_SUBTITLE}}</div>
     <div class="screenshot-slot">
       <img src="data:image/png;base64,{{SCREENSHOT_BASE64}}" alt="Page screenshot">
+      {{MARKERS_HTML}}
     </div>
     <div class="steps-container">
       {{STEPS_HTML}}

@@ -38,7 +38,27 @@ function buildStepsHtml(steps) {
   }).join('\n');
 }
 
-function populateTemplate(template, annotationData, screenshotBase64, focus, pageUrl) {
+const POSITION_MAP = {
+  'top-left':      { top: '12%', left: '15%' },
+  'top-center':    { top: '12%', left: '50%' },
+  'top-right':     { top: '12%', left: '85%' },
+  'center':        { top: '50%', left: '50%' },
+  'center-left':   { top: '50%', left: '15%' },
+  'center-right':  { top: '50%', left: '85%' },
+  'bottom-left':   { top: '85%', left: '15%' },
+  'bottom-center': { top: '85%', left: '50%' },
+  'bottom-right':  { top: '85%', left: '85%' },
+};
+
+function buildMarkersHtml(analysisData) {
+  if (!analysisData || !analysisData.elements) return '';
+  return analysisData.elements.map((el, i) => {
+    const pos = POSITION_MAP[el.position] || POSITION_MAP['center'];
+    return `<div class="marker" style="top:${pos.top};left:${pos.left}">${el.id || i + 1}</div>`;
+  }).join('\n');
+}
+
+function populateTemplate(template, annotationData, screenshotBase64, focus, pageUrl, analysisData) {
   return template
     .replace('{{CARD_TITLE}}', escapeHtml(annotationData.cardTitle))
     .replace('{{CARD_SUBTITLE}}', escapeHtml(annotationData.cardSubtitle))
@@ -46,15 +66,16 @@ function populateTemplate(template, annotationData, screenshotBase64, focus, pag
     .replace('{{PAGE_URL}}', escapeHtml(pageUrl || ''))
     .replace('{{FOCUS_LABEL}}', escapeHtml(focus || ''))
     .replace('{{FOCUS_BADGE_STYLE}}', focus ? '' : 'display:none')
-    .replace('{{SCREENSHOT_BASE64}}', screenshotBase64);
+    .replace('{{SCREENSHOT_BASE64}}', screenshotBase64)
+    .replace('{{MARKERS_HTML}}', buildMarkersHtml(analysisData));
 }
 
-async function renderCard(annotationData, screenshotBase64, focus = null, pageUrl = '') {
+async function renderCard(annotationData, screenshotBase64, focus = null, pageUrl = '', analysisData = null) {
   let browser = null;
   let page = null;
   try {
     const template = fs.readFileSync(path.join(__dirname, '../templates/card.html'), 'utf8');
-    const html = populateTemplate(template, annotationData, screenshotBase64, focus, pageUrl);
+    const html = populateTemplate(template, annotationData, screenshotBase64, focus, pageUrl, analysisData);
 
     browser = await puppeteer.launch(getLaunchOptions());
     page = await browser.newPage();
