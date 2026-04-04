@@ -13,7 +13,7 @@ Four phases follow the natural pipeline build order: scaffold the server and val
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: Foundation** - Express server scaffolded and Puppeteer confirmed working on VPS
-- [ ] **Phase 2: Screenshot + AI Services** - All three data-pipeline services built and tested in isolation
+- [x] **Phase 2: Screenshot + AI Services** - All three data-pipeline services built and tested in isolation (completed 2026-04-04)
 - [ ] **Phase 3: Card Template + Render** - HTML template designed and Puppeteer render producing correct 1080x1920 PNGs on VPS
 - [ ] **Phase 4: Pipeline Wiring + Frontend + Deploy** - Full end-to-end app live on Hostinger VPS
 
@@ -44,12 +44,12 @@ Plans:
   4. When a focus hint is provided, both Gemini and Claude output reflect that focus goal
   5. When no focus hint is provided, Gemini infers a topic and Claude copy aligns to the inferred focus
   6. AI JSON parsing retries up to 2 times and strips markdown fences before failing with a clear error message
-**Plans:** 4 plans (3 complete + 1 gap closure)
+**Plans:** 4/4 plans complete
 Plans:
 - [x] 02-01-PLAN.md — Shared retry infrastructure, .env.example fix, screenshotOne capture service + test
 - [x] 02-02-PLAN.md — Gemini 2.5 Flash vision analysis with structured output + test
 - [x] 02-03-PLAN.md — Claude Sonnet copywriting service + full pipeline test
-- [ ] 02-04-PLAN.md — Gap closure: add step-count-to-element-count constraint to Claude prompts
+- [x] 02-04-PLAN.md — Gap closure: add step-count-to-element-count constraint to Claude prompts
 
 ### Phase 3: Card Template + Render
 **Goal**: The HTML card template renders a correct 1080x1920 dark-themed PNG via Puppeteer, with fonts embedded and all content slots filled
@@ -85,6 +85,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 1/2 | In Progress|  |
-| 2. Screenshot + AI Services | 3/4 | Gap closure | - |
+| 2. Screenshot + AI Services | 4/4 | Complete   | 2026-04-04 |
 | 3. Card Template + Render | 0/? | Not started | - |
 | 4. Pipeline Wiring + Frontend + Deploy | 0/? | Not started | - |
