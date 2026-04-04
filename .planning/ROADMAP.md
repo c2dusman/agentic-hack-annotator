@@ -76,9 +76,9 @@ Plans:
   3. Generated image is displayed in the browser with a working Download button
   4. Submitting an invalid URL or a URL that fails to screenshot shows a meaningful error message (not a generic server error)
   5. Output PNG files are automatically deleted from the server after 1 hour
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 Plans:
-- [ ] 04-01-PLAN.md — Wire POST /api/generate route, cron cleanup, and build complete frontend (HTML/CSS/JS)
+- [x] 04-01-PLAN.md — Wire POST /api/generate route, cron cleanup, and build complete frontend (HTML/CSS/JS)
 - [ ] 04-02-PLAN.md — Deploy to VPS via git pull + PM2 restart, smoke test full pipeline live
 **UI hint**: yes
 
@@ -92,4 +92,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Foundation | 1/2 | In Progress|  |
 | 2. Screenshot + AI Services | 4/4 | Complete   | 2026-04-04 |
 | 3. Card Template + Render | 1/1 | Complete   | 2026-04-04 |
-| 4. Pipeline Wiring + Frontend + Deploy | 0/2 | Not started | - |
+| 4. Pipeline Wiring + Frontend + Deploy | 1/2 | In Progress|  |

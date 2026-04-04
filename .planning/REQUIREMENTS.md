@@ -7,7 +7,7 @@
 
 ### Pipeline
 
-- [ ] **PIPE-01**: User can submit a URL and receive a 1080x1920 annotated PNG image
+- [x] **PIPE-01**: User can submit a URL and receive a 1080x1920 annotated PNG image
 - [x] **PIPE-02**: Screenshot captured via screenshotOne API (full page, 1200px viewport, PNG)
 - [x] **PIPE-03**: Gemini 2.5 Flash analyzes screenshot and returns structured JSON (pageTitle, pageTopic, detectedFocus, elements[])
 - [x] **PIPE-04**: Claude Sonnet writes tutorial-style annotation copy (cardTitle, cardSubtitle, steps[])
@@ -29,17 +29,17 @@
 
 ### Frontend
 
-- [ ] **UI-01**: Web UI with URL input field and optional focus hint field
-- [ ] **UI-02**: Loading state shows step-by-step progress (screenshot → analysis → copy → render)
-- [ ] **UI-03**: Generated image displayed with Download button
-- [ ] **UI-04**: Error states shown with meaningful messages
+- [x] **UI-01**: Web UI with URL input field and optional focus hint field
+- [x] **UI-02**: Loading state shows step-by-step progress (screenshot → analysis → copy → render)
+- [x] **UI-03**: Generated image displayed with Download button
+- [x] **UI-04**: Error states shown with meaningful messages
 
 ### Reliability
 
 - [x] **REL-01**: AI JSON parsing includes retry logic (max 2 attempts) with markdown fence sanitizer
 - [x] **REL-02**: All pipeline errors return meaningful user-facing messages
 - [x] **REL-03**: Puppeteer browser instances cleaned up via try/finally (no orphaned Chrome)
-- [ ] **REL-04**: Output files auto-cleaned after 1 hour
+- [x] **REL-04**: Output files auto-cleaned after 1 hour
 
 ### Deployment
 
@@ -82,7 +82,7 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PIPE-01 | Phase 4 | Pending |
+| PIPE-01 | Phase 4 | Complete |
 | PIPE-02 | Phase 2 | Complete |
 | PIPE-03 | Phase 2 | Complete |
 | PIPE-04 | Phase 2 | Complete |
@@ -95,14 +95,14 @@
 | TMPL-01 | Phase 3 | Complete |
 | TMPL-02 | Phase 3 | Complete |
 | TMPL-03 | Phase 3 | Complete |
-| UI-01 | Phase 4 | Pending |
-| UI-02 | Phase 4 | Pending |
-| UI-03 | Phase 4 | Pending |
-| UI-04 | Phase 4 | Pending |
+| UI-01 | Phase 4 | Complete |
+| UI-02 | Phase 4 | Complete |
+| UI-03 | Phase 4 | Complete |
+| UI-04 | Phase 4 | Complete |
 | REL-01 | Phase 2 | Complete |
 | REL-02 | Phase 2 | Complete |
 | REL-03 | Phase 1 | Complete |
-| REL-04 | Phase 4 | Pending |
+| REL-04 | Phase 4 | Complete |
 | DEPLOY-01 | Phase 1 | Pending |
 | DEPLOY-02 | Phase 1 | Complete |
 | DEPLOY-03 | Phase 1 | Complete |

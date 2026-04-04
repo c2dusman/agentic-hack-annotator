@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
-stopped_at: Phase 4 context gathered
-last_updated: "2026-04-04T13:36:42.126Z"
+status: executing
+stopped_at: Completed 04-01-PLAN.md
+last_updated: "2026-04-04T18:34:24.014Z"
 last_activity: 2026-04-04
 progress:
   total_phases: 4
   completed_phases: 3
-  total_plans: 7
-  completed_plans: 7
+  total_plans: 9
+  completed_plans: 8
   percent: 0
 ---
 
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-04)
 
 **Core value:** One URL in, one beautiful annotated image out — no manual editing, fully automated.
-**Current focus:** Phase 03 — card-template-render
+**Current focus:** Phase 04 — pipeline-wiring-frontend-deploy
 
 ## Current Position
 
-Phase: 4
-Plan: Not started
-Status: Phase complete — ready for verification
+Phase: 04 (pipeline-wiring-frontend-deploy) — EXECUTING
+Plan: 2 of 2
+Status: Ready to execute
 Last activity: 2026-04-04
 
 Progress: [░░░░░░░░░░] 0%
@@ -58,6 +58,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 02-screenshot-ai-services P03 | 5 | 2 tasks | 2 files |
 | Phase 02-screenshot-ai-services P04 | 27s | 1 tasks | 1 files |
 | Phase 03-card-template-render P01 | 144s | 3 tasks | 3 files |
+| Phase 04-pipeline-wiring-frontend-deploy P01 | 105s | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -78,6 +79,8 @@ Recent decisions affecting current work:
 - [Phase 02-screenshot-ai-services]: One-step-per-element constraint added as explicit Rule in both FOCUS_PROMPT and NO_FOCUS_PROMPT in annotate.js — identical wording for consistency
 - [Phase 03-card-template-render]: waitUntil: domcontentloaded + document.fonts.ready avoids networkidle0 timeout (D-04)
 - [Phase 03-card-template-render]: SCREENSHOT_BASE64 replaced last in populateTemplate — largest substitution goes last for predictable replace()
+- [Phase 04-pipeline-wiring-frontend-deploy]: Client-side URL validation (isValidUrlClient) mirrors server-side isValidUrl() — both enforce http/https protocol (D-08)
+- [Phase 04-pipeline-wiring-frontend-deploy]: Express 5 async route uses inline try/catch for JSON error response — prevents Express default error handler from sending non-JSON response
 
 ### Pending Todos
 
@@ -92,6 +95,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-04T13:36:42.122Z
-Stopped at: Phase 4 context gathered
-Resume file: .planning/phases/04-pipeline-wiring-frontend-deploy/04-CONTEXT.md
+Last session: 2026-04-04T18:34:24.010Z
+Stopped at: Completed 04-01-PLAN.md
+Resume file: None
