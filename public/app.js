@@ -17,7 +17,11 @@ const stepLoadingSection = document.getElementById('step-loading-section');
 const stepGallery = document.getElementById('step-gallery');
 const stepImagesContainer = document.getElementById('step-images');
 
+const downloadAllBtn = document.getElementById('download-all-btn');
+
 let currentOverviewId = null;
+let currentOverviewUrl = null;
+let currentStepUrls = [];
 
 // Loading stage labels (D-01: emoji + label per UI-SPEC Copywriting Contract)
 const STAGES = [
@@ -98,6 +102,8 @@ function showResult(imageUrl, overviewId, stepCount) {
 
   // Show step cards button if we have steps
   currentOverviewId = overviewId;
+  currentOverviewUrl = imageUrl;
+  currentStepUrls = [];
   if (stepCount && stepCount > 0) {
     stepCardsBtn.hidden = false;
     stepCardsBtn.textContent = `Generate ${stepCount} Step-by-Step Images`;
@@ -180,6 +186,7 @@ stepCardsBtn.addEventListener('click', async () => {
     if (!response.ok) {
       showError(data.error || 'Step card generation failed.');
     } else {
+      currentStepUrls = data.imageUrls;
       stepImagesContainer.innerHTML = data.imageUrls.map((url, i) => `
         <div class="step-image-card">
           <img src="${url}" alt="Step ${i + 1}">
@@ -194,5 +201,39 @@ stepCardsBtn.addEventListener('click', async () => {
     stepLoadingSection.hidden = true;
     stepCardsBtn.disabled = false;
     stepCardsBtn.textContent = `Generate ${stepImagesContainer.children.length || ''} Step-by-Step Images`;
+  }
+});
+
+// Download All as ZIP handler
+downloadAllBtn.addEventListener('click', async () => {
+  const allFiles = [currentOverviewUrl, ...currentStepUrls].filter(Boolean);
+  if (allFiles.length === 0) return;
+
+  downloadAllBtn.textContent = 'Preparing ZIP...';
+  downloadAllBtn.style.pointerEvents = 'none';
+  downloadAllBtn.style.opacity = '0.5';
+
+  try {
+    const response = await fetch('/api/download-all', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ files: allFiles })
+    });
+
+    if (!response.ok) throw new Error('Download failed');
+
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'annotatorai-carousel.zip';
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch {
+    showError('Failed to download ZIP.');
+  } finally {
+    downloadAllBtn.textContent = 'Download All as ZIP';
+    downloadAllBtn.style.pointerEvents = '';
+    downloadAllBtn.style.opacity = '';
   }
 });

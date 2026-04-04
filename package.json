@@ -8,15 +8,16 @@
     "dev": "nodemon server.js"
   },
   "dependencies": {
-    "express": "^5",
-    "puppeteer": "^24",
-    "dotenv": "^17",
-    "uuid": "^13",
-    "node-cron": "^4",
-    "sharp": "^0.34",
-    "@google/genai": "^1",
     "@anthropic-ai/sdk": "^0.82",
-    "screenshotone-api-sdk": "latest"
+    "@google/genai": "^1",
+    "archiver": "^7.0.1",
+    "dotenv": "^17",
+    "express": "^5",
+    "node-cron": "^4",
+    "puppeteer": "^24",
+    "screenshotone-api-sdk": "latest",
+    "sharp": "^0.34",
+    "uuid": "^13"
   },
   "devDependencies": {
     "nodemon": "^3"

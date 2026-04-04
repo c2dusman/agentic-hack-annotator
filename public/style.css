@@ -303,6 +303,26 @@ input[type="text"]::placeholder {
   text-align: center;
 }
 
+.download-all-btn {
+  display: block;
+  text-align: center;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: #FFFFFF;
+  background: #FF2D6B;
+  border-radius: 8px;
+  padding: 14px 24px;
+  text-decoration: none;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 150ms ease;
+}
+
+.download-all-btn:hover {
+  background: #E0245E;
+}
+
 .step-images-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

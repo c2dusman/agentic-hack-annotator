@@ -6,6 +6,8 @@ const { analyzeScreenshot } = require('./src/analyze');
 const { generateAnnotations } = require('./src/annotate');
 const { renderCard, renderStepCards } = require('./src/render');
 const cron = require('node-cron');
+const archiver = require('archiver');
+const fs = require('fs');
 const { isValidUrl, sanitizeFocus, cleanupOldFiles, ensureOutputDir, withTimeout } = require('./src/utils');
 
 dotenv.config();
@@ -88,6 +90,38 @@ app.post('/api/step-cards', async (req, res) => {
     console.error(`[${new Date().toISOString()}] Step cards error:`, err.message);
     res.status(500).json({ error: err.message });
   }
+});
+
+// POST /api/download-all — zip overview + step images and stream to client
+app.post('/api/download-all', (req, res) => {
+  const { files } = req.body;
+
+  if (!files || !Array.isArray(files) || files.length === 0) {
+    return res.status(400).json({ error: 'No files specified' });
+  }
+
+  const outputDir = path.join(__dirname, 'output');
+  const validFiles = files
+    .map(f => f.replace(/^\/output\//, ''))
+    .filter(f => /^[\w-]+\.png$/.test(f) && fs.existsSync(path.join(outputDir, f)));
+
+  if (validFiles.length === 0) {
+    return res.status(404).json({ error: 'No valid files found' });
+  }
+
+  res.setHeader('Content-Type', 'application/zip');
+  res.setHeader('Content-Disposition', 'attachment; filename="annotatorai-carousel.zip"');
+
+  const archive = archiver('zip', { zlib: { level: 5 } });
+  archive.pipe(res);
+
+  // Add overview as first file
+  validFiles.forEach((f, i) => {
+    const name = i === 0 ? '0-overview.png' : `${i}-step-${i}.png`;
+    archive.file(path.join(outputDir, f), { name });
+  });
+
+  archive.finalize();
 });
 
 // Error handler (Express 5 requires 4-param signature)
