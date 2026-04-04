@@ -1,2 +1,163 @@
-<!-- TODO: Phase 3 — full card template -->
-<html><body><h1>AnnotatorAI Card Template</h1></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1080">
+  <title>AnnotatorAI Card</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,700&family=Space+Grotesk:wght@600;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+    }
+
+    .card {
+      width: 1080px;
+      height: 1920px;
+      background: #0D0D0D;
+      overflow: hidden;
+      font-family: 'DM Sans', sans-serif;
+      color: #CCCCCC;
+      display: flex;
+      flex-direction: column;
+      padding: 80px 72px;
+    }
+
+    .focus-badge {
+      display: inline-block;
+      background: #FF2D6B;
+      color: #FFFFFF;
+      font-size: 28px;
+      font-weight: 700;
+      padding: 8px 24px;
+      border-radius: 100px;
+      margin-bottom: 32px;
+      align-self: flex-start;
+    }
+
+    .card-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 72px;
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .pink-divider {
+      width: 80px;
+      height: 4px;
+      background: #FF2D6B;
+      margin-bottom: 24px;
+    }
+
+    .card-subtitle {
+      font-size: 32px;
+      color: #CCCCCC;
+      line-height: 1.4;
+      margin-bottom: 48px;
+    }
+
+    .screenshot-slot {
+      width: 100%;
+      flex: 0 0 520px;
+      border-radius: 12px;
+      border: 2px solid rgba(255, 45, 107, 0.4);
+      overflow: hidden;
+      margin-bottom: 48px;
+    }
+
+    .screenshot-slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+    }
+
+    .steps-container {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+    }
+
+    .step-number {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #FF2D6B;
+      color: #FFFFFF;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step-content {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .step-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: #FFFFFF;
+    }
+
+    .step-description {
+      font-size: 28px;
+      color: #CCCCCC;
+      line-height: 1.4;
+      -webkit-line-clamp: 2;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .footer {
+      margin-top: auto;
+      padding-top: 32px;
+      font-size: 24px;
+      color: rgba(255, 255, 255, 0.3);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="focus-badge" style="{{FOCUS_BADGE_STYLE}}">{{FOCUS_LABEL}}</div>
+    <div class="card-title">{{CARD_TITLE}}</div>
+    <div class="pink-divider"></div>
+    <div class="card-subtitle">{{CARD_SUBTITLE}}</div>
+    <div class="screenshot-slot">
+      <img src="data:image/png;base64,{{SCREENSHOT_BASE64}}" alt="Page screenshot">
+    </div>
+    <div class="steps-container">
+      {{STEPS_HTML}}
+    </div>
+    <div class="footer">AnnotatorAI &middot; {{PAGE_URL}}</div>
+  </div>
+</body>
+</html>
