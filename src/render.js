@@ -38,24 +38,15 @@ function buildStepsHtml(steps) {
   }).join('\n');
 }
 
-const POSITION_MAP = {
-  'top-left':      { top: '12%', left: '15%' },
-  'top-center':    { top: '12%', left: '50%' },
-  'top-right':     { top: '12%', left: '85%' },
-  'center':        { top: '50%', left: '50%' },
-  'center-left':   { top: '50%', left: '15%' },
-  'center-right':  { top: '50%', left: '85%' },
-  'bottom-left':   { top: '85%', left: '15%' },
-  'bottom-center': { top: '85%', left: '50%' },
-  'bottom-right':  { top: '85%', left: '85%' },
-};
-
 function buildMarkersHtml(analysisData) {
   if (!analysisData || !analysisData.elements) return '';
-  return analysisData.elements.map((el, i) => {
-    const pos = POSITION_MAP[el.position] || POSITION_MAP['center'];
-    return `<div class="marker" style="top:${pos.top};left:${pos.left}">${el.id || i + 1}</div>`;
+  const overlay = '<div class="screenshot-overlay"></div>';
+  const markers = analysisData.elements.map((el, i) => {
+    const x = Math.max(5, Math.min(95, el.x_percent || 50));
+    const y = Math.max(5, Math.min(95, el.y_percent || 50));
+    return `<div class="marker" style="top:${y}%;left:${x}%">${el.id || i + 1}</div>`;
   }).join('\n');
+  return overlay + '\n' + markers;
 }
 
 function populateTemplate(template, annotationData, screenshotBase64, focus, pageUrl, analysisData) {
