@@ -12,7 +12,7 @@ One URL in, one beautiful annotated image out — no manual editing, no design t
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] HTML template rendered via Puppeteer at 1080x1920 with dark theme and pink accents — Validated in Phase 3: card-template-render
 
 ### Active
 
@@ -22,7 +22,7 @@ One URL in, one beautiful annotated image out — no manual editing, no design t
 - [ ] Screenshot captured via screenshotOne API (full page, 1200px viewport)
 - [ ] Gemini 2.5 Flash analyzes screenshot with focus-aware prompts, returns structured JSON
 - [ ] Claude Sonnet writes tutorial-style annotation copy aligned to focus (or inferred focus)
-- [ ] HTML template rendered via Puppeteer at 1080x1920 with dark theme and pink accents
+- [x] HTML template rendered via Puppeteer at 1080x1920 with dark theme and pink accents (→ Validated)
 - [ ] Web UI with URL input, optional focus hint input, loading states, and image download
 - [ ] App deployed and running on Hostinger VPS via PM2
 - [ ] Error handling with retry logic on AI calls and meaningful user-facing error messages
@@ -83,4 +83,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-04 after initialization*
+*Last updated: 2026-04-04 after Phase 3 completion*
