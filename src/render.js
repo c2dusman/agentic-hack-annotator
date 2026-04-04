@@ -103,13 +103,14 @@ async function cropElement(screenshotBase64, element) {
   const cx = (element.x_percent / 100) * imgW;
   const cy = (element.y_percent / 100) * imgH;
 
-  // Use element bounding box with padding, but enforce a minimum crop size
-  const elW = ((element.w_percent || 10) / 100) * imgW;
-  const elH = ((element.h_percent || 5) / 100) * imgH;
+  // Use element bounding box with padding
+  const elW = ((element.w_percent || 8) / 100) * imgW;
+  const elH = ((element.h_percent || 4) / 100) * imgH;
 
-  // Crop = element size + padding, but at least 40% width / 20% height of image
-  let width = Math.max(Math.round(elW * 2.5), Math.round(imgW * 0.40));
-  let height = Math.max(Math.round(elH * 2.5), Math.round(imgH * 0.20));
+  // Crop = element size * 3 (element + generous context), clamped to reasonable range
+  // Min 15% width / 8% height (tight zoom), max 50% / 30% (wide context)
+  let width = Math.round(Math.min(Math.max(elW * 3, imgW * 0.15), imgW * 0.50));
+  let height = Math.round(Math.min(Math.max(elH * 3, imgH * 0.08), imgH * 0.30));
 
   let left = Math.round(cx - width / 2);
   let top = Math.round(cy - height / 2);
