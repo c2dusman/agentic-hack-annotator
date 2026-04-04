@@ -103,14 +103,14 @@ async function cropElement(screenshotBase64, element) {
   const cx = (element.x_percent / 100) * imgW;
   const cy = (element.y_percent / 100) * imgH;
 
-  // Use element bounding box with padding
-  const elW = ((element.w_percent || 8) / 100) * imgW;
-  const elH = ((element.h_percent || 4) / 100) * imgH;
+  // Use element bounding box with padding, crop as square
+  const elW = ((element.w_percent || 10) / 100) * imgW;
+  const elH = ((element.h_percent || 5) / 100) * imgH;
 
-  // Crop = element size * 3 (element + generous context), clamped to reasonable range
-  // Min 15% width / 8% height (tight zoom), max 50% / 30% (wide context)
-  let width = Math.round(Math.min(Math.max(elW * 3, imgW * 0.15), imgW * 0.50));
-  let height = Math.round(Math.min(Math.max(elH * 3, imgH * 0.08), imgH * 0.30));
+  // Square crop: use the larger dimension * 2.5 for context, min 25% of image width
+  const side = Math.round(Math.max(elW * 2.5, elH * 2.5, imgW * 0.25));
+  let width = side;
+  let height = side;
 
   let left = Math.round(cx - width / 2);
   let top = Math.round(cy - height / 2);
@@ -157,13 +157,13 @@ async function renderStepCards(annotationData, screenshotBase64, analysisData, p
         .replace('{{PAGE_URL}}', escapeHtml(pageUrl || ''));
 
       const page = await browser.newPage();
-      await page.setViewport({ width: 1080, height: 1920 });
+      await page.setViewport({ width: 1080, height: 1080 });
       await page.setContent(html, { waitUntil: 'domcontentloaded' });
       await page.evaluate(() => document.fonts.ready);
 
       const rawBuffer = await page.screenshot({
         type: 'png',
-        clip: { x: 0, y: 0, width: 1080, height: 1920 }
+        clip: { x: 0, y: 0, width: 1080, height: 1080 }
       });
       await page.close();
 
