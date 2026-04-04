@@ -10,14 +10,14 @@
 - [ ] **PIPE-01**: User can submit a URL and receive a 1080x1920 annotated PNG image
 - [x] **PIPE-02**: Screenshot captured via screenshotOne API (full page, 1200px viewport, PNG)
 - [x] **PIPE-03**: Gemini 2.5 Flash analyzes screenshot and returns structured JSON (pageTitle, pageTopic, detectedFocus, elements[])
-- [ ] **PIPE-04**: Claude Sonnet writes tutorial-style annotation copy (cardTitle, cardSubtitle, steps[])
+- [x] **PIPE-04**: Claude Sonnet writes tutorial-style annotation copy (cardTitle, cardSubtitle, steps[])
 - [ ] **PIPE-05**: Puppeteer renders HTML template to PNG at 1080x1920 with Sharp optimization
 
 ### Focus Hint
 
 - [x] **FOCUS-01**: User can optionally provide a focus hint to direct annotations
 - [x] **FOCUS-02**: When focus provided, Gemini prioritizes elements relevant to the focus goal
-- [ ] **FOCUS-03**: When focus provided, Claude aligns all copy to the focus goal
+- [x] **FOCUS-03**: When focus provided, Claude aligns all copy to the focus goal
 - [x] **FOCUS-04**: When no focus provided, Gemini infers the best annotation topic automatically
 - [ ] **FOCUS-05**: Focus badge appears on output card when hint is provided, hidden when not
 
@@ -85,11 +85,11 @@
 | PIPE-01 | Phase 4 | Pending |
 | PIPE-02 | Phase 2 | Complete |
 | PIPE-03 | Phase 2 | Complete |
-| PIPE-04 | Phase 2 | Pending |
+| PIPE-04 | Phase 2 | Complete |
 | PIPE-05 | Phase 3 | Pending |
 | FOCUS-01 | Phase 2 | Complete |
 | FOCUS-02 | Phase 2 | Complete |
-| FOCUS-03 | Phase 2 | Pending |
+| FOCUS-03 | Phase 2 | Complete |
 | FOCUS-04 | Phase 2 | Complete |
 | FOCUS-05 | Phase 3 | Pending |
 | TMPL-01 | Phase 3 | Pending |
