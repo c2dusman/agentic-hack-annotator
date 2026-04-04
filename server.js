@@ -24,10 +24,15 @@ app.get('/api/health', (req, res) => {
 
 // POST /api/generate — full pipeline: screenshot -> analyze -> annotate -> render
 app.post('/api/generate', async (req, res) => {
-  const { url, focus: rawFocus } = req.body;
+  let { url, focus: rawFocus } = req.body;
+
+  // Auto-prepend https:// for bare domains
+  if (url && !/^https?:\/\//i.test(url.trim())) {
+    url = 'https://' + url.trim();
+  }
 
   if (!url || !isValidUrl(url)) {
-    return res.status(400).json({ error: 'Please enter a valid URL starting with http:// or https://' });
+    return res.status(400).json({ error: 'Please enter a valid URL (e.g. www.google.com)' });
   }
 
   const focus = sanitizeFocus(rawFocus);

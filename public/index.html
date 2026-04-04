@@ -3,40 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AnnotatorAI</title>
+  <title>AnnotatorAI - Turn any URL into an annotated visual</title>
+  <link rel="icon" type="image/png" href="logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main class="container">
-    <h1>AnnotatorAI</h1>
-    <p class="subtitle">Paste any URL. Get an annotated visual. Instantly.</p>
+    <header class="hero">
+      <img src="logo.png" alt="AnnotatorAI logo" class="logo">
+      <h1>AnnotatorAI</h1>
+      <p class="tagline">Turn any URL into a beautifully annotated visual — instantly.</p>
+    </header>
+
+    <section class="how-it-works">
+      <div class="step-pill"><span class="pill-num">1</span> Paste a URL</div>
+      <div class="step-arrow">&rarr;</div>
+      <div class="step-pill"><span class="pill-num">2</span> AI analyzes the page</div>
+      <div class="step-arrow">&rarr;</div>
+      <div class="step-pill"><span class="pill-num">3</span> Get a ready-to-share image</div>
+    </section>
 
     <form id="generate-form">
       <div class="field-group">
-        <label for="url-input">URL</label>
+        <label for="url-input">Website URL</label>
         <input
-          type="url"
+          type="text"
           id="url-input"
-          placeholder="https://example.com"
+          placeholder="e.g. www.google.com or https://example.com"
           required
           autocomplete="url"
         >
+        <p class="helper-text">We'll add https:// automatically if you leave it out</p>
       </div>
 
       <div class="field-group">
-        <label for="focus-input">Focus (optional)</label>
+        <label for="focus-input">Focus hint <span class="optional-tag">optional</span></label>
         <input
           type="text"
           id="focus-input"
           placeholder="e.g. How to connect Gmail, Setting up API keys"
         >
-        <p class="helper-text">Leave blank and AI will decide what to annotate</p>
+        <p class="helper-text">Tell the AI what to focus on, or leave blank and it will decide</p>
       </div>
 
-      <button type="submit" id="generate-btn">Generate Image</button>
+      <button type="submit" id="generate-btn">Generate Annotated Image</button>
 
       <p id="inline-error" class="inline-error" hidden></p>
     </form>
@@ -44,7 +57,7 @@
     <div id="loading-section" hidden>
       <div class="spinner"></div>
       <p id="status-text" class="status-text"></p>
-      <p id="long-running-notice" class="long-running-notice" hidden>Taking longer than usual...</p>
+      <p id="long-running-notice" class="long-running-notice" hidden>Taking longer than usual — hang tight!</p>
     </div>
 
     <div id="result-section" hidden>
@@ -55,6 +68,36 @@
     <div id="error-section" class="error-box" hidden>
       <p id="error-text"></p>
     </div>
+
+    <section class="features">
+      <h2>What does AnnotatorAI do?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">&#128247;</div>
+          <h3>Screenshot Capture</h3>
+          <p>Takes a full-page screenshot of any public URL using the ScreenshotOne API.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#129504;</div>
+          <h3>AI Vision Analysis</h3>
+          <p>Gemini 2.5 Flash identifies key UI elements and pinpoints their exact locations.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#9997;&#65039;</div>
+          <h3>Smart Copywriting</h3>
+          <p>Claude Sonnet generates clear, concise step-by-step annotations for each element.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#127912;</div>
+          <h3>Ready-to-Share Output</h3>
+          <p>Produces a 9:16 dark-themed card image perfect for social media carousels and blogs.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <p>Built with Gemini 2.5 Flash, Claude Sonnet & Puppeteer &middot; Hosted on Hostinger VPS</p>
+    </footer>
   </main>
 
   <script src="app.js"></script>

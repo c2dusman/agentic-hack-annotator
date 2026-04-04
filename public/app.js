@@ -21,7 +21,16 @@ const STAGES = [
   '🎨 Rendering image...'
 ];
 
-// Client-side URL validation (mirrors server-side isValidUrl logic)
+// Auto-prepend https:// if the user entered a bare domain
+function normalizeUrl(str) {
+  str = str.trim();
+  if (!/^https?:\/\//i.test(str)) {
+    str = 'https://' + str;
+  }
+  return str;
+}
+
+// Client-side URL validation
 function isValidUrlClient(str) {
   try {
     const parsed = new URL(str);
@@ -93,7 +102,7 @@ generateForm.addEventListener('submit', async (e) => {
 
   hideInlineError();
 
-  const url = urlInput.value.trim();
+  let url = urlInput.value.trim();
   const focus = focusInput.value.trim();
 
   if (!url) {
@@ -101,8 +110,11 @@ generateForm.addEventListener('submit', async (e) => {
     return;
   }
 
+  url = normalizeUrl(url);
+  urlInput.value = url;
+
   if (!isValidUrlClient(url)) {
-    showInlineError('Please enter a valid URL starting with http:// or https://');
+    showInlineError('Please enter a valid URL (e.g. www.google.com)');
     return;
   }
 
