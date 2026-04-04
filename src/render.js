@@ -93,4 +93,94 @@ async function renderCard(annotationData, screenshotBase64, focus = null, pageUr
   }
 }
 
-module.exports = { renderCard, getLaunchOptions };
+async function cropElement(screenshotBase64, element) {
+  const imgBuffer = Buffer.from(screenshotBase64, 'base64');
+  const metadata = await sharp(imgBuffer).metadata();
+  const imgW = metadata.width;
+  const imgH = metadata.height;
+
+  // Element center from Gemini percentages
+  const cx = (element.x_percent / 100) * imgW;
+  const cy = (element.y_percent / 100) * imgH;
+
+  // Use element bounding box with padding, but enforce a minimum crop size
+  const elW = ((element.w_percent || 10) / 100) * imgW;
+  const elH = ((element.h_percent || 5) / 100) * imgH;
+
+  // Crop = element size + padding, but at least 40% width / 20% height of image
+  let width = Math.max(Math.round(elW * 2.5), Math.round(imgW * 0.40));
+  let height = Math.max(Math.round(elH * 2.5), Math.round(imgH * 0.20));
+
+  let left = Math.round(cx - width / 2);
+  let top = Math.round(cy - height / 2);
+
+  // Clamp to image bounds
+  if (left < 0) left = 0;
+  if (top < 0) top = 0;
+  if (left + width > imgW) width = imgW - left;
+  if (top + height > imgH) height = imgH - top;
+
+  // Ensure minimum crop size
+  if (width < 100) width = Math.min(100, imgW);
+  if (height < 100) height = Math.min(100, imgH);
+
+  const cropped = await sharp(imgBuffer)
+    .extract({ left, top, width, height })
+    .png()
+    .toBuffer();
+
+  return cropped.toString('base64');
+}
+
+async function renderStepCards(annotationData, screenshotBase64, analysisData, pageUrl = '') {
+  let browser = null;
+  try {
+    const template = fs.readFileSync(path.join(__dirname, '../templates/step-card.html'), 'utf8');
+    browser = await puppeteer.launch(getLaunchOptions());
+    const totalSteps = annotationData.steps.length;
+    const filenames = [];
+
+    for (let i = 0; i < totalSteps; i++) {
+      const step = annotationData.steps[i];
+      const element = analysisData.elements[i];
+      if (!element) continue;
+
+      const croppedBase64 = await cropElement(screenshotBase64, element);
+
+      const html = template
+        .replace('{{STEP_INDICATOR}}', escapeHtml(`Step ${step.number} of ${totalSteps}`))
+        .replace('{{STEP_NUM}}', step.number)
+        .replace('{{STEP_LABEL}}', escapeHtml(step.label))
+        .replace('{{STEP_DESCRIPTION}}', escapeHtml(step.description))
+        .replace('{{CROPPED_BASE64}}', croppedBase64)
+        .replace('{{PAGE_URL}}', escapeHtml(pageUrl || ''));
+
+      const page = await browser.newPage();
+      await page.setViewport({ width: 1080, height: 1920 });
+      await page.setContent(html, { waitUntil: 'domcontentloaded' });
+      await page.evaluate(() => document.fonts.ready);
+
+      const rawBuffer = await page.screenshot({
+        type: 'png',
+        clip: { x: 0, y: 0, width: 1080, height: 1920 }
+      });
+      await page.close();
+
+      const optimized = await sharp(rawBuffer)
+        .png({ compressionLevel: 9, palette: false })
+        .toBuffer();
+
+      ensureOutputDir();
+      const filename = generateId() + '.png';
+      const filepath = path.join(process.env.OUTPUT_DIR || './output', filename);
+      fs.writeFileSync(filepath, optimized);
+      filenames.push(filename);
+    }
+
+    return filenames;
+  } finally {
+    if (browser) await browser.close().catch(() => {});
+  }
+}
+
+module.exports = { renderCard, renderStepCards, getLaunchOptions };

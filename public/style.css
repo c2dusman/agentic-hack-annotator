@@ -256,6 +256,82 @@ input[type="text"]::placeholder {
   color: #FFFFFF;
 }
 
+.result-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.step-cards-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: #FFFFFF;
+  background: transparent;
+  border: 2px solid #FF2D6B;
+  border-radius: 8px;
+  padding: 14px 24px;
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.step-cards-btn:hover {
+  background: #FF2D6B;
+  color: #FFFFFF;
+}
+
+.step-cards-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#step-loading-section {
+  text-align: center;
+  margin-top: 32px;
+}
+
+/* --- Step Gallery --- */
+#step-gallery {
+  margin-top: 40px;
+}
+
+.gallery-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.step-images-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.step-image-card {
+  text-align: center;
+}
+
+.step-image-card img {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 8px;
+}
+
+.step-image-card a {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #FF2D6B;
+  text-decoration: none;
+}
+
+.step-image-card a:hover {
+  text-decoration: underline;
+}
+
 /* --- Error --- */
 .error-box {
   margin-top: 48px;

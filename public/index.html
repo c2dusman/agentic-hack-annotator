@@ -62,7 +62,20 @@
 
     <div id="result-section" hidden>
       <img id="result-image" alt="Generated annotation">
-      <a id="download-btn" class="download-btn">Download Image</a>
+      <div class="result-actions">
+        <a id="download-btn" class="download-btn">Download Overview</a>
+        <button id="step-cards-btn" class="step-cards-btn" hidden>Generate Step-by-Step Images</button>
+      </div>
+    </div>
+
+    <div id="step-loading-section" hidden>
+      <div class="spinner"></div>
+      <p class="status-text">Generating zoomed step images...</p>
+    </div>
+
+    <div id="step-gallery" hidden>
+      <h2 class="gallery-title">Step-by-Step Images</h2>
+      <div id="step-images" class="step-images-grid"></div>
     </div>
 
     <div id="error-section" class="error-box" hidden>

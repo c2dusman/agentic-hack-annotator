@@ -12,6 +12,12 @@ const resultImage = document.getElementById('result-image');
 const downloadBtn = document.getElementById('download-btn');
 const errorText = document.getElementById('error-text');
 const inlineError = document.getElementById('inline-error');
+const stepCardsBtn = document.getElementById('step-cards-btn');
+const stepLoadingSection = document.getElementById('step-loading-section');
+const stepGallery = document.getElementById('step-gallery');
+const stepImagesContainer = document.getElementById('step-images');
+
+let currentOverviewId = null;
 
 // Loading stage labels (D-01: emoji + label per UI-SPEC Copywriting Contract)
 const STAGES = [
@@ -84,11 +90,22 @@ function stopLoading() {
   generateBtn.disabled = false;
 }
 
-function showResult(imageUrl) {
+function showResult(imageUrl, overviewId, stepCount) {
   resultImage.src = imageUrl;
   downloadBtn.href = imageUrl;
   downloadBtn.download = imageUrl.split('/').pop();
   resultSection.hidden = false;
+
+  // Show step cards button if we have steps
+  currentOverviewId = overviewId;
+  if (stepCount && stepCount > 0) {
+    stepCardsBtn.hidden = false;
+    stepCardsBtn.textContent = `Generate ${stepCount} Step-by-Step Images`;
+    stepCardsBtn.disabled = false;
+  }
+  // Reset step gallery
+  stepGallery.hidden = true;
+  stepImagesContainer.innerHTML = '';
 }
 
 function showError(message) {
@@ -132,11 +149,50 @@ generateForm.addEventListener('submit', async (e) => {
     if (!response.ok) {
       showError(data.error || 'Generation failed.');
     } else {
-      showResult(data.imageUrl);
+      showResult(data.imageUrl, data.overviewId, data.stepCount);
     }
   } catch {
     showError('Network error. Please try again.');
   } finally {
     stopLoading();
+  }
+});
+
+// Step cards button handler
+stepCardsBtn.addEventListener('click', async () => {
+  if (!currentOverviewId) return;
+
+  stepCardsBtn.disabled = true;
+  stepCardsBtn.textContent = 'Generating...';
+  stepLoadingSection.hidden = false;
+  stepGallery.hidden = true;
+  stepImagesContainer.innerHTML = '';
+
+  try {
+    const response = await fetch('/api/step-cards', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ overviewId: currentOverviewId })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      showError(data.error || 'Step card generation failed.');
+    } else {
+      stepImagesContainer.innerHTML = data.imageUrls.map((url, i) => `
+        <div class="step-image-card">
+          <img src="${url}" alt="Step ${i + 1}">
+          <a href="${url}" download="step-${i + 1}.png">Download Step ${i + 1}</a>
+        </div>
+      `).join('');
+      stepGallery.hidden = false;
+    }
+  } catch {
+    showError('Network error generating step images.');
+  } finally {
+    stepLoadingSection.hidden = true;
+    stepCardsBtn.disabled = false;
+    stepCardsBtn.textContent = `Generate ${stepImagesContainer.children.length || ''} Step-by-Step Images`;
   }
 });
