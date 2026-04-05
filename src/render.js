@@ -41,9 +41,16 @@ function buildStepsHtml(steps) {
 function buildMarkersHtml(analysisData) {
   if (!analysisData || !analysisData.elements) return '';
   return analysisData.elements.map((el, i) => {
-    const x = Math.max(5, Math.min(95, el.x_percent || 50));
-    const y = Math.max(5, Math.min(95, el.y_percent || 50));
-    return `<div class="marker" style="top:${y}%;left:${x}%">${el.id || i + 1}</div>`;
+    const cx = el.x_percent || 50;
+    const cy = el.y_percent || 50;
+    const w = Math.max(4, el.w_percent || 10);
+    const h = Math.max(4, el.h_percent || 5);
+
+    // Convert center + size to top-left corner, clamped to screenshot bounds
+    const left = Math.max(0, Math.min(100 - w, cx - w / 2));
+    const top = Math.max(0, Math.min(100 - h, cy - h / 2));
+
+    return `<div class="bbox" style="top:${top}%;left:${left}%;width:${w}%;height:${h}%"><span class="bbox-num">${el.id || i + 1}</span></div>`;
   }).join('\n');
 }
 

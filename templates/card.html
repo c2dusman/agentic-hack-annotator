@@ -83,22 +83,30 @@
       display: block;
     }
 
-    .marker {
+    .bbox {
       position: absolute;
-      width: 52px;
-      height: 52px;
+      border: 3px solid #FF2D6B;
+      border-radius: 8px;
+      background: rgba(255, 45, 107, 0.08);
+      z-index: 2;
+    }
+
+    .bbox-num {
+      position: absolute;
+      top: -14px;
+      left: -14px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       background: #FF2D6B;
       color: #FFFFFF;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 28px;
+      font-size: 18px;
       font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
-      transform: translate(-50%, -50%);
-      box-shadow: 0 0 0 4px rgba(255, 45, 107, 0.35), 0 4px 12px rgba(0,0,0,0.5);
-      z-index: 2;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     }
 
     .steps-container {
