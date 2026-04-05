@@ -6,17 +6,24 @@ const { withJsonRetry } = require('./utils');
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 const FOCUS_PROMPT = `You are analyzing a webpage screenshot to extract structured annotation data.
+Your bounding boxes will be used to draw highlight rectangles on the screenshot, so accuracy is critical.
 
 The user wants to create a tutorial focused on: "{{FOCUS_HINT}}"
 
 With that focus in mind, analyze this screenshot and identify the 3 to 5 UI elements
 most relevant to that specific goal. Ignore elements unrelated to the focus topic.
 
-For each element, provide:
-- x_percent, y_percent (0-100): the CENTER of the element, where 0,0 is top-left
-- w_percent, h_percent (0-100): the WIDTH and HEIGHT of the element as a percentage of the screenshot
-
-Be precise — look at where each element actually is and how large it is.
+BOUNDING BOX RULES (critical for visual quality):
+- x_percent, y_percent (0-100): the CENTER of the element's visible bounding box, where 0,0 is top-left of screenshot
+- w_percent, h_percent (0-100): the FULL WIDTH and HEIGHT of the element as a percentage of the screenshot
+- The bounding box must TIGHTLY wrap the visible element — include the entire button, entire heading, entire form section, etc.
+- For buttons: include the full button background/border, not just the text
+- For headings/text blocks: include all lines of the heading or paragraph
+- For form sections: include labels and input fields together
+- For navigation: include the full nav bar or tab row
+- NEVER return tiny bounding boxes (w_percent < 5 or h_percent < 3) unless the element is genuinely that small (like a single icon)
+- Double-check: if you drew a rectangle at these coordinates, would it fully surround the element? If not, adjust.
+- Only annotate elements that are clearly visible in the screenshot — do not guess at elements that are cut off or hidden
 
 Return a JSON object with exactly this structure:
 {
@@ -39,15 +46,22 @@ Return a JSON object with exactly this structure:
 Return ONLY valid JSON. No explanation. No markdown.`;
 
 const NO_FOCUS_PROMPT = `You are analyzing a webpage screenshot to extract structured annotation data.
+Your bounding boxes will be used to draw highlight rectangles on the screenshot, so accuracy is critical.
 
 Analyze this screenshot and identify the 3 to 5 most important interactive or
 informational elements. Focus on what makes this page useful to a first-time visitor.
 
-For each element, provide:
-- x_percent, y_percent (0-100): the CENTER of the element, where 0,0 is top-left
-- w_percent, h_percent (0-100): the WIDTH and HEIGHT of the element as a percentage of the screenshot
-
-Be precise — look at where each element actually is and how large it is.
+BOUNDING BOX RULES (critical for visual quality):
+- x_percent, y_percent (0-100): the CENTER of the element's visible bounding box, where 0,0 is top-left of screenshot
+- w_percent, h_percent (0-100): the FULL WIDTH and HEIGHT of the element as a percentage of the screenshot
+- The bounding box must TIGHTLY wrap the visible element — include the entire button, entire heading, entire form section, etc.
+- For buttons: include the full button background/border, not just the text
+- For headings/text blocks: include all lines of the heading or paragraph
+- For form sections: include labels and input fields together
+- For navigation: include the full nav bar or tab row
+- NEVER return tiny bounding boxes (w_percent < 5 or h_percent < 3) unless the element is genuinely that small (like a single icon)
+- Double-check: if you drew a rectangle at these coordinates, would it fully surround the element? If not, adjust.
+- Only annotate elements that are clearly visible in the screenshot — do not guess at elements that are cut off or hidden
 
 Return a JSON object with exactly this structure:
 {

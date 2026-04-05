@@ -199,10 +199,25 @@ async function renderStepCards(annotationData, screenshotBase64, analysisData, p
       const cropResult = await cropElement(screenshotBase64, element);
 
       // Bounding box position relative to crop (percentages)
-      const bboxLeft = ((cropResult.elLeft - cropResult.cropLeft) / cropResult.cropWidth) * 100;
-      const bboxTop = ((cropResult.elTop - cropResult.cropTop) / cropResult.cropHeight) * 100;
-      const bboxW = (cropResult.elW / cropResult.cropWidth) * 100;
-      const bboxH = (cropResult.elH / cropResult.cropHeight) * 100;
+      let bboxLeft = ((cropResult.elLeft - cropResult.cropLeft) / cropResult.cropWidth) * 100;
+      let bboxTop = ((cropResult.elTop - cropResult.cropTop) / cropResult.cropHeight) * 100;
+      let bboxW = (cropResult.elW / cropResult.cropWidth) * 100;
+      let bboxH = (cropResult.elH / cropResult.cropHeight) * 100;
+
+      // Enforce minimum bbox size (at least 20% of crop in each dimension)
+      if (bboxW < 20) {
+        const expand = (20 - bboxW) / 2;
+        bboxLeft = Math.max(0, bboxLeft - expand);
+        bboxW = 20;
+      }
+      if (bboxH < 15) {
+        const expand = (15 - bboxH) / 2;
+        bboxTop = Math.max(0, bboxTop - expand);
+        bboxH = 15;
+      }
+      // Clamp to stay within crop bounds
+      if (bboxLeft + bboxW > 100) bboxLeft = Math.max(0, 100 - bboxW);
+      if (bboxTop + bboxH > 100) bboxTop = Math.max(0, 100 - bboxH);
 
       const bboxHtml = `<div class="zoom-bbox" style="top:${bboxTop}%;left:${bboxLeft}%;width:${bboxW}%;height:${bboxH}%"></div>`;
 
@@ -210,12 +225,6 @@ async function renderStepCards(annotationData, screenshotBase64, analysisData, p
       const cursorHtml = isClickable(element)
         ? `<div class="click-cursor" style="top:${bboxTop + bboxH}%;left:${bboxLeft + bboxW}%"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 3l14 8-6 2-4 6z" fill="white" fill-opacity="0.85" stroke="#FF2D6B" stroke-width="1.5"/></svg></div>`
         : '';
-
-      // Minimap highlight (crop region as % of full screenshot)
-      const mmLeft = (cropResult.cropLeft / cropResult.imgW) * 100;
-      const mmTop = (cropResult.cropTop / cropResult.imgH) * 100;
-      const mmW = (cropResult.cropWidth / cropResult.imgW) * 100;
-      const mmH = (cropResult.cropHeight / cropResult.imgH) * 100;
 
       const html = template
         .replace('{{STEP_INDICATOR}}', escapeHtml(`Step ${step.number} of ${totalSteps}`))
@@ -225,11 +234,6 @@ async function renderStepCards(annotationData, screenshotBase64, analysisData, p
         .replace('{{CROPPED_BASE64}}', cropResult.base64)
         .replace('{{BBOX_HTML}}', bboxHtml)
         .replace('{{CURSOR_HTML}}', cursorHtml)
-        .replace('{{SCREENSHOT_BASE64}}', screenshotBase64)
-        .replace('{{MINIMAP_LEFT}}', mmLeft.toFixed(2))
-        .replace('{{MINIMAP_TOP}}', mmTop.toFixed(2))
-        .replace('{{MINIMAP_W}}', mmW.toFixed(2))
-        .replace('{{MINIMAP_H}}', mmH.toFixed(2))
         .replace('{{PAGE_URL}}', escapeHtml(pageUrl || ''));
 
       const page = await browser.newPage();
