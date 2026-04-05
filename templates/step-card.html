@@ -100,6 +100,49 @@
       display: block;
     }
 
+    .zoom-bbox {
+      position: absolute;
+      border: 3px solid #FF2D6B;
+      border-radius: 6px;
+      background: rgba(255, 45, 107, 0.08);
+      box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .click-cursor {
+      position: absolute;
+      z-index: 3;
+      transform: translate(-30%, -70%);
+      pointer-events: none;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    }
+
+    .minimap {
+      height: 60px;
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+      margin-top: 12px;
+      flex-shrink: 0;
+    }
+
+    .minimap-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+    }
+
+    .minimap-highlight {
+      position: absolute;
+      border: 2px solid #FF2D6B;
+      border-radius: 3px;
+      box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.55);
+      z-index: 2;
+    }
+
     .footer {
       margin-top: auto;
       padding-top: 16px;
@@ -120,6 +163,12 @@
     <div class="step-description">{{STEP_DESCRIPTION}}</div>
     <div class="zoom-container">
       <img src="data:image/png;base64,{{CROPPED_BASE64}}" alt="Zoomed view">
+      {{BBOX_HTML}}
+      {{CURSOR_HTML}}
+    </div>
+    <div class="minimap">
+      <img src="data:image/png;base64,{{SCREENSHOT_BASE64}}" alt="Full page" class="minimap-img">
+      <div class="minimap-highlight" style="left:{{MINIMAP_LEFT}}%;top:{{MINIMAP_TOP}}%;width:{{MINIMAP_W}}%;height:{{MINIMAP_H}}%"></div>
     </div>
     <div class="footer">AnnotatorAI &middot; {{PAGE_URL}}</div>
   </div>

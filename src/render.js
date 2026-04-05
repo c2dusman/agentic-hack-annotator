@@ -100,44 +100,87 @@ async function renderCard(annotationData, screenshotBase64, focus = null, pageUr
   }
 }
 
+function isClickable(element) {
+  const text = `${element.label || ''} ${element.description || ''}`.toLowerCase();
+  return /\b(click|tap|button|link|toggle|switch|select|dropdown|menu|nav|submit|sign|log.?in|checkout|add to cart|subscribe|download|upload|cta|get started|try|start)\b/.test(text);
+}
+
 async function cropElement(screenshotBase64, element) {
   const imgBuffer = Buffer.from(screenshotBase64, 'base64');
   const metadata = await sharp(imgBuffer).metadata();
   const imgW = metadata.width;
   const imgH = metadata.height;
 
-  // Element center from Gemini percentages
+  // Element center and dimensions from Gemini percentages
   const cx = (element.x_percent / 100) * imgW;
   const cy = (element.y_percent / 100) * imgH;
-
-  // Use element bounding box with padding, crop as square
   const elW = ((element.w_percent || 10) / 100) * imgW;
   const elH = ((element.h_percent || 5) / 100) * imgH;
 
-  // Square crop: use the larger dimension * 2.5 for context, min 25% of image width
-  const side = Math.round(Math.max(elW * 2.5, elH * 2.5, imgW * 0.25));
-  let width = side;
-  let height = side;
+  // Element top-left in full image pixels
+  const elLeft = Math.round(cx - elW / 2);
+  const elTop = Math.round(cy - elH / 2);
 
-  let left = Math.round(cx - width / 2);
-  let top = Math.round(cy - height / 2);
+  // Adaptive padding based on element area
+  const area = (element.w_percent || 10) * (element.h_percent || 5);
+  let padMultiplier;
+  if (area < 50) padMultiplier = 3.0;
+  else if (area < 200) padMultiplier = 2.2;
+  else padMultiplier = 1.5;
 
-  // Clamp to image bounds
+  // Rectangular crop matching zoom container aspect ratio (~1.4:1)
+  const TARGET_RATIO = 1.4;
+  let cropW = Math.max(elW * padMultiplier, imgW * 0.15);
+  let cropH = Math.max(elH * padMultiplier, imgH * 0.12);
+
+  // Adjust to target aspect ratio
+  if (cropW / cropH > TARGET_RATIO) {
+    cropH = cropW / TARGET_RATIO;
+  } else {
+    cropW = cropH * TARGET_RATIO;
+  }
+
+  cropW = Math.round(cropW);
+  cropH = Math.round(cropH);
+
+  // Center crop around element
+  let left = Math.round(cx - cropW / 2);
+  let top = Math.round(cy - cropH / 2);
+
+  // Shift origin before truncating (preserve aspect ratio)
   if (left < 0) left = 0;
   if (top < 0) top = 0;
-  if (left + width > imgW) width = imgW - left;
-  if (top + height > imgH) height = imgH - top;
+  if (left + cropW > imgW) left = Math.max(0, imgW - cropW);
+  if (top + cropH > imgH) top = Math.max(0, imgH - cropH);
+
+  // Final clamp if crop is larger than image
+  let width = Math.min(cropW, imgW - left);
+  let height = Math.min(cropH, imgH - top);
 
   // Ensure minimum crop size
   if (width < 100) width = Math.min(100, imgW);
   if (height < 100) height = Math.min(100, imgH);
 
-  const cropped = await sharp(imgBuffer)
-    .extract({ left, top, width, height })
-    .png()
-    .toBuffer();
+  // Extract and sharpen small crops
+  let pipeline = sharp(imgBuffer).extract({ left, top, width, height });
+  if (width < 400 || height < 400) {
+    pipeline = pipeline.sharpen({ sigma: 1.0 });
+  }
+  const cropped = await pipeline.png().toBuffer();
 
-  return cropped.toString('base64');
+  return {
+    base64: cropped.toString('base64'),
+    cropLeft: left,
+    cropTop: top,
+    cropWidth: width,
+    cropHeight: height,
+    imgW,
+    imgH,
+    elLeft: Math.max(0, elLeft),
+    elTop: Math.max(0, elTop),
+    elW: Math.round(elW),
+    elH: Math.round(elH)
+  };
 }
 
 async function renderStepCards(annotationData, screenshotBase64, analysisData, pageUrl = '') {
@@ -153,14 +196,40 @@ async function renderStepCards(annotationData, screenshotBase64, analysisData, p
       const element = analysisData.elements[i];
       if (!element) continue;
 
-      const croppedBase64 = await cropElement(screenshotBase64, element);
+      const cropResult = await cropElement(screenshotBase64, element);
+
+      // Bounding box position relative to crop (percentages)
+      const bboxLeft = ((cropResult.elLeft - cropResult.cropLeft) / cropResult.cropWidth) * 100;
+      const bboxTop = ((cropResult.elTop - cropResult.cropTop) / cropResult.cropHeight) * 100;
+      const bboxW = (cropResult.elW / cropResult.cropWidth) * 100;
+      const bboxH = (cropResult.elH / cropResult.cropHeight) * 100;
+
+      const bboxHtml = `<div class="zoom-bbox" style="top:${bboxTop}%;left:${bboxLeft}%;width:${bboxW}%;height:${bboxH}%"></div>`;
+
+      // Cursor indicator for clickable elements
+      const cursorHtml = isClickable(element)
+        ? `<div class="click-cursor" style="top:${bboxTop + bboxH}%;left:${bboxLeft + bboxW}%"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 3l14 8-6 2-4 6z" fill="white" fill-opacity="0.85" stroke="#FF2D6B" stroke-width="1.5"/></svg></div>`
+        : '';
+
+      // Minimap highlight (crop region as % of full screenshot)
+      const mmLeft = (cropResult.cropLeft / cropResult.imgW) * 100;
+      const mmTop = (cropResult.cropTop / cropResult.imgH) * 100;
+      const mmW = (cropResult.cropWidth / cropResult.imgW) * 100;
+      const mmH = (cropResult.cropHeight / cropResult.imgH) * 100;
 
       const html = template
         .replace('{{STEP_INDICATOR}}', escapeHtml(`Step ${step.number} of ${totalSteps}`))
         .replace('{{STEP_NUM}}', step.number)
         .replace('{{STEP_LABEL}}', escapeHtml(step.label))
         .replace('{{STEP_DESCRIPTION}}', escapeHtml(step.description))
-        .replace('{{CROPPED_BASE64}}', croppedBase64)
+        .replace('{{CROPPED_BASE64}}', cropResult.base64)
+        .replace('{{BBOX_HTML}}', bboxHtml)
+        .replace('{{CURSOR_HTML}}', cursorHtml)
+        .replace('{{SCREENSHOT_BASE64}}', screenshotBase64)
+        .replace('{{MINIMAP_LEFT}}', mmLeft.toFixed(2))
+        .replace('{{MINIMAP_TOP}}', mmTop.toFixed(2))
+        .replace('{{MINIMAP_W}}', mmW.toFixed(2))
+        .replace('{{MINIMAP_H}}', mmH.toFixed(2))
         .replace('{{PAGE_URL}}', escapeHtml(pageUrl || ''));
 
       const page = await browser.newPage();
